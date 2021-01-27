@@ -1,10 +1,10 @@
-import org.jline.terminal.TerminalBuilder
-import ru.ought.magic_robot.parseArgs
-import java.util.*
+package ru.ought.magic_robot
 
-fun main(args: Array<String>) {
-    val params = parseArgs(args)
-    val terminal = TerminalBuilder.terminal()
+import org.fusesource.jansi.Ansi.ansi
+import org.jline.terminal.TerminalBuilder
+
+fun main(@Suppress("UNUSED_PARAMETER") args: Array<String>) {
+    val terminal = TerminalBuilder.terminal().apply { enterRawMode() }
     println("Hello World!")
     val reader = terminal.reader()
     if (reader.read() == 'c'.toInt()) {
@@ -12,7 +12,6 @@ fun main(args: Array<String>) {
     } else {
         println("I dunno...")
     }
-    val lol = Scanner(terminal.input()).next()
-    println("Lol... $lol")
+    println(ansi().eraseScreen().cursor(1, 1).render("@|red,bg_white HELLO, HUMAN!|@"))
     reader.read()
 }

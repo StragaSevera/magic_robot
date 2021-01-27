@@ -26,7 +26,7 @@ dependencies {
 }
 
 application {
-    mainClass.set(javaMainClass)
+    mainClass.set("$javaGroup.$javaMainClass")
 }
 
 tasks.withType<Test> {
@@ -36,7 +36,7 @@ tasks.withType<Test> {
 tasks.withType<Jar> {
     manifest {
         attributes(
-            "Main-Class" to javaMainClass
+            "Main-Class" to "$javaGroup.$javaMainClass"
         )
     }
 }
