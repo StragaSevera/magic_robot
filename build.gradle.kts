@@ -18,6 +18,7 @@ dependencies {
     val jansiVersion = "2.2.0"
     val jlineVersion = "3.19.0"
     implementation(kotlin("stdlib"))
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
     implementation("org.fusesource.jansi:jansi:$jansiVersion")
     implementation("org.jline:jline:$jlineVersion")
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
