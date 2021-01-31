@@ -41,3 +41,7 @@ tasks.withType<Jar> {
         )
     }
 }
+
+tasks.build {
+    finalizedBy(tasks.installDist)
+}

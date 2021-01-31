@@ -1,77 +1,44 @@
 package ru.ought.magic_robot
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.fusesource.jansi.Ansi
 import org.jline.terminal.Terminal
-import java.io.Reader
-import java.math.BigInteger
+import org.jline.utils.NonBlockingReader
+import ru.ought.magic_robot.MessageType.Close
+import ru.ought.magic_robot.MessageType.Render
 
-class Engine(terminal: Terminal, private val scope: CoroutineScope) {
+class Engine(terminal: Terminal) {
     private val reader = terminal.reader()
+    private val game = Game()
+    private val exitCodes = arrayOf(NonBlockingReader.EOF, 3, 4)
 
     suspend fun start() {
-        clr()
-        println("Hello World!")
-        val sumOfBigNumbers = sumOfBigNumbers()
-        println(sumOfBigNumbers)
-        reader.readSuspending()
-    }
-
-    @Suppress("BlockingMethodInNonBlockingContext")
-    private suspend fun Reader.readSuspending() {
-        withContext(Dispatchers.IO) { read() }
-    }
-
-    private suspend fun sumOfBigNumbers(): BigInteger {
-        val deferreds = (0..10_000_000_000 step 100_000_000)
-            .map(Long::toBigInteger)
-            .zipWithNext { a, b ->
-                scope.async(Dispatchers.Default) {
-                    var result = BigInteger.ZERO
-                    for ((counter, i) in (a..b).withIndex()) {
-                        result += i
-                        if (counter % 1_000_000 == 0 && counter != 0) {
-                            log("Progress for $a..$b: #$counter $result")
-                            yield()
-                        }
-                    }
-                    log("Finished for $a..$b: $result")
-                    result
-                }
+        var message = game.start()
+        while (true) {
+            clr()
+            when (message.type) {
+                Render -> println(message.content)
+                Close -> break
             }
-        return deferreds.map { it.await() }.sumOf { it }
+            val input = reader.readSuspending()
+            if (input in exitCodes) break
+            message = game.tick(input.toChar())
+        }
+    }
+
+    @Suppress("BlockingMethodInNonBlockingContext", "ControlFlowWithEmptyBody")
+    private suspend fun NonBlockingReader.readSuspending() = withContext(Dispatchers.IO) {
+        var result = read()
+        // Unifying Windows CR to LF
+        if (result == 13) result = 10
+        // Skipping additional characters that can be added by a "dumb" terminal
+        while (read(1) != NonBlockingReader.READ_EXPIRED) {}
+        result
     }
 
     private fun clr() {
         print(Ansi.ansi().eraseScreen().cursor(1, 1))
-    }
-}
-
-fun log(msg: String) = println("[${Thread.currentThread().name}] $msg")
-
-operator fun BigInteger.rangeTo(other: BigInteger) =
-    BigIntegerRange(this, other)
-
-class BigIntegerRange(
-    override val start: BigInteger,
-    override val endInclusive: BigInteger
-) : ClosedRange<BigInteger>, Iterable<BigInteger> {
-    override operator fun iterator(): Iterator<BigInteger> =
-        BigIntegerRangeIterator(this)
-}
-
-class BigIntegerRangeIterator(
-    private val range: ClosedRange<BigInteger>
-) : Iterator<BigInteger> {
-    private var current = range.start
-
-    override fun hasNext(): Boolean =
-        current <= range.endInclusive
-
-    override fun next(): BigInteger {
-        if (!hasNext()) {
-            throw NoSuchElementException()
-        }
-        return current++
     }
 }
