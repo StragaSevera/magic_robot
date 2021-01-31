@@ -17,13 +17,14 @@ dependencies {
     val atriumVersion = "0.15.0"
     val jansiVersion = "2.2.0"
     val jlineVersion = "3.19.0"
+    val mockkVersion = "1.10.5"
     implementation(kotlin("stdlib"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
     implementation("org.fusesource.jansi:jansi:$jansiVersion")
     implementation("org.jline:jline:$jlineVersion")
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
-    testImplementation("io.kotest:kotest-extensions-spring:$kotestVersion")
     testImplementation("ch.tutteli.atrium:atrium-fluent-en_GB:$atriumVersion")
+    testImplementation("io.mockk:mockk:$mockkVersion")
 }
 
 application {
