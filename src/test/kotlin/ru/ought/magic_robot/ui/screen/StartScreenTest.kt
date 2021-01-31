@@ -1,11 +1,10 @@
-package ru.ought.magic_robot.game.screen
+package ru.ought.magic_robot.ui.screen
 
 import ch.tutteli.atrium.api.fluent.en_GB.*
 import ch.tutteli.atrium.api.verbs.expect
 import io.kotest.core.spec.style.FunSpec
-import io.kotest.matchers.types.beInstanceOf
-import ru.ought.magic_robot.game.GameMessage
-import ru.ought.magic_robot.game.GameState
+import ru.ought.magic_robot.ui.UIMessage
+import ru.ought.magic_robot.mechanics.GameState
 
 class StartScreenTest : FunSpec({
     test("it works") {
@@ -14,6 +13,6 @@ class StartScreenTest : FunSpec({
         val message = screen.process('0')
 
         expect(message.next).isA<DummyScreen>()
-        expect(message.message).toBe(GameMessage.render("This is a Magic Robot.\nPress any key to start combat..."))
+        expect(message.message).toBe(UIMessage.render("This is a Magic Robot.\nPress any key to start combat..."))
     }
 })

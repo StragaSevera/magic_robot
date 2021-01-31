@@ -6,11 +6,11 @@ import kotlinx.coroutines.withContext
 import org.fusesource.jansi.Ansi
 import org.jline.terminal.Terminal
 import org.jline.utils.NonBlockingReader
-import ru.ought.magic_robot.game.Game
-import ru.ought.magic_robot.game.GameMessageType.Close
-import ru.ought.magic_robot.game.GameMessageType.Render
-import ru.ought.magic_robot.game.GameState
-import ru.ought.magic_robot.game.screen.StartScreen
+import ru.ought.magic_robot.ui.UI
+import ru.ought.magic_robot.ui.UIMessageType.Close
+import ru.ought.magic_robot.ui.UIMessageType.Render
+import ru.ought.magic_robot.mechanics.GameState
+import ru.ought.magic_robot.ui.screen.StartScreen
 
 class Engine(terminal: Terminal) {
     private val reader = terminal.reader()
@@ -18,10 +18,10 @@ class Engine(terminal: Terminal) {
     private val game = buildDefaultGame()
 
     // Injecting dependencies into Game
-    private fun buildDefaultGame(): Game {
+    private fun buildDefaultGame(): UI {
         val gameState = GameState()
         val initialScreen = StartScreen(gameState)
-        return Game(initialScreen)
+        return UI(initialScreen)
     }
 
     suspend fun start() = coroutineScope {
