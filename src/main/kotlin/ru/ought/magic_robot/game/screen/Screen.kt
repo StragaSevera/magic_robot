@@ -11,9 +11,3 @@ abstract class Screen(private val state: GameState) {
     fun render(content: String, next: Screen) = ScreenMessage(GameMessage.render(content), next)
     fun close() = ScreenMessage(GameMessage.close(), DummyScreen(state))
 }
-
-class DummyScreen(state: GameState) : Screen(state) {
-    override fun process(input: Char): ScreenMessage {
-        error("Unable to render a dummy screen!")
-    }
-}
