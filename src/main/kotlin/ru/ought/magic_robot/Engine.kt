@@ -10,7 +10,7 @@ import ru.ought.magic_robot.game.Game
 import ru.ought.magic_robot.game.GameMessageType.Close
 import ru.ought.magic_robot.game.GameMessageType.Render
 import ru.ought.magic_robot.game.GameState
-import ru.ought.magic_robot.game.screen.DummyScreen
+import ru.ought.magic_robot.game.screen.StartScreen
 
 class Engine(terminal: Terminal) {
     private val reader = terminal.reader()
@@ -20,7 +20,7 @@ class Engine(terminal: Terminal) {
     // Injecting dependencies into Game
     private fun buildDefaultGame(): Game {
         val gameState = GameState()
-        val initialScreen = DummyScreen(gameState)
+        val initialScreen = StartScreen(gameState)
         return Game(initialScreen)
     }
 

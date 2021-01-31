@@ -5,7 +5,7 @@ import ru.ought.magic_robot.game.GameState
 
 data class ScreenMessage(val message: GameMessage, val next: Screen)
 
-abstract class Screen(private val state: GameState) {
+abstract class Screen(protected val state: GameState) {
     abstract fun process(input: Char): ScreenMessage
 
     fun render(content: String, next: Screen) = ScreenMessage(GameMessage.render(content), next)

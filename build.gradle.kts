@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     kotlin("jvm") version "1.4.21"
     application
@@ -27,6 +29,10 @@ dependencies {
     testImplementation("io.mockk:mockk:$mockkVersion")
 }
 
+tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions { jvmTarget = "1.8" }
+}
+
 application {
     mainClass.set("$javaGroup.$javaMainClass")
 }
@@ -46,3 +52,4 @@ tasks.withType<Jar> {
 tasks.build {
     finalizedBy(tasks.installDist)
 }
+
