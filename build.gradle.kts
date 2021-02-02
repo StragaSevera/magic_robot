@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    val kotestVersion = "4.3.2"
+    val kotestVersion = "4.4.0"
     val atriumVersion = "0.15.0"
     val jansiVersion = "2.2.0"
     val jlineVersion = "3.19.0"
