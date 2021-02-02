@@ -15,7 +15,7 @@ enum class Element {
 
 private sealed class Cycle {
     protected abstract val cycle: Array<Element>
-    operator fun get(i: Int) = cycle[i modulo Element.values().size]
+    operator fun get(i: Int) = cycle[i modulo cycle.size]
     fun next(element: Element) = get(cycle.indexOf(element) + 1)
     fun prev(element: Element) = get(cycle.indexOf(element) - 1)
 }
